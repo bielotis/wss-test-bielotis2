@@ -1,4 +1,4 @@
-const frase = "es";
+const frase = "e";
 
 let autoMode = false;
 let terminado = false;
