@@ -1,4 +1,4 @@
-const frase = "El zorro marrón salta sobre el perro perezoso";
+const frase = "e";
 
 let autoMode = false;
 let terminado = false;
