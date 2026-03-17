@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/bielotis/wss-test-bielotis2/issues"
   },
-  "homepage": "https://github.com/bielotis/wss-test-bielotis2#readme"
+  "homepage": "https://github.com/bielotis/wss-test-bielotis2#readme",
+  "dependencies": {
+    "ws": "^8.19.0"
+  }
 }
