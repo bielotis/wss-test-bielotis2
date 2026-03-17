@@ -30,7 +30,7 @@ target.textContent = frase;
 // =====================================
 //  WEBSOCKET
 // =====================================
-const ws = new WebSocket("wss://TU-SERVIDOR.onrender.com");
+const ws = new WebSocket("wss://wss-test-bielotis2.onrender.com/");
 
 ws.onopen = () => {
   ws.send(JSON.stringify({ tipo: "inicio", frase }));
