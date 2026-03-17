@@ -1,19 +1,48 @@
-const WebSocket = require('ws');
+import { WebSocketServer } from "ws";
 
-// Render asigna el puerto mediante la variable de entorno PORT
-const port = process.env.PORT || 8080;
+const wss = new WebSocketServer({ port: process.env.PORT || 3001 });
 
-const wss = new WebSocket.Server({ port }, () => {
-    console.log(`Servidor WebSocket corriendo en el puerto ${port}`);
-});
+// Ranking en memoria
+let ranking = [];
 
-wss.on('connection', (ws) => {
-    console.log('Nuevo cliente conectado');
-    
-    ws.on('message', (message) => {
-        console.log(`Recibido: ${message}`);
-        ws.send(`Hola, recibí tu mensaje: ${message}`);
-    });
+function broadcast(data) {
+  const msg = JSON.stringify(data);
+  wss.clients.forEach(c => {
+    if (c.readyState === 1) c.send(msg);
+  });
+}
 
-    ws.send('¡Conectado exitosamente al servidor de Render!');
+wss.on("connection", (socket) => {
+  console.log("Nuevo cliente conectado");
+
+  // ❗ SOLO JSON
+  socket.send(JSON.stringify({ tipo: "ranking", ranking }));
+
+  socket.on("message", (msg) => {
+    let data;
+    try {
+      data = JSON.parse(msg);
+    } catch (e) {
+      console.log("Mensaje ignorado (no es JSON):", msg);
+      return;
+    }
+
+    if (data.tipo === "resultado") {
+      ranking.push({
+        cps: parseFloat(data.cps),
+        wpm: parseFloat(data.wpm),
+        precision: parseFloat(data.precision),
+        errores: data.errores,
+        fecha: Date.now()
+      });
+
+      ranking.sort((a, b) => b.cps - a.cps);
+
+      broadcast({ tipo: "ranking", ranking });
+    }
+  });
+
+  socket.on("close", () => {
+    console.log("Cliente desconectado");
+  });
 });
