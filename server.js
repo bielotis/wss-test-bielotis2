@@ -2,7 +2,6 @@ import { WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: process.env.PORT || 3001 });
 
-// Ranking en memoria
 let ranking = [];
 
 function broadcast(data) {
@@ -13,17 +12,13 @@ function broadcast(data) {
 }
 
 wss.on("connection", (socket) => {
-  console.log("Nuevo cliente conectado");
-
-  // ❗ SOLO JSON
   socket.send(JSON.stringify({ tipo: "ranking", ranking }));
 
   socket.on("message", (msg) => {
     let data;
     try {
       data = JSON.parse(msg);
-    } catch (e) {
-      console.log("Mensaje ignorado (no es JSON):", msg);
+    } catch {
       return;
     }
 
@@ -33,6 +28,7 @@ wss.on("connection", (socket) => {
         wpm: parseFloat(data.wpm),
         precision: parseFloat(data.precision),
         errores: data.errores,
+        bot: data.bot,
         fecha: Date.now()
       });
 
@@ -40,9 +36,5 @@ wss.on("connection", (socket) => {
 
       broadcast({ tipo: "ranking", ranking });
     }
-  });
-
-  socket.on("close", () => {
-    console.log("Cliente desconectado");
   });
 });
