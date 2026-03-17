@@ -28,7 +28,6 @@ wss.on("connection", (socket) => {
         wpm: parseFloat(data.wpm),
         precision: parseFloat(data.precision),
         errores: data.errores,
-        bot: data.bot,          // ← ← ← AQUÍ ESTABA EL PROBLEMA
         fecha: Date.now()
       });
 
