@@ -15,7 +15,7 @@ const rankingBox = document.getElementById("ranking");
 
 target.textContent = frase;
 
-const ws = new WebSocket("wss://wss-test-bielotis2.onrender.com/");
+const ws = new WebSocket("wss://fun.codelearn.cat/typing_race_inner/socket.io/?EIO=4&transport=websocket&sid=KDV6LSYyFnp7USnAAATk");
 
 ws.onopen = () => {
   console.log("WS abierto");
